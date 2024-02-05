@@ -1,4 +1,5 @@
 // 58R1EJUD14R0JHTZ55Q4
+
 /* ====== Common GET Request Function ====== */
 async function getRequest(url) {
   return await fetch(url).then((response) => {
@@ -9,17 +10,30 @@ async function getRequest(url) {
   });
 }
 
-async function getMovies() {
-  const url = `/kmdb/data/data.php`;
+async function getProducts(page) {
+  const url = `https://yts.mx/api/v2/list_movies.json?limit=5&order_by=desc&genre=Animation&page=${page}`;
 
   try {
-    //데이터 요청 및 응답 시도 : 성공일 경우 첫번째 코드 블럭으로 이동
+    // 데이터 요청 및 응답 시도 : 성공일 경우 첫번째 코드 블럭으로 이동
     const data = await getRequest(url);
-    console.log(data);
+    const randomData = Math.floor(Math.random() * 5); //0보다 크고 1보다 작은 난수 에 곱하기 5를 해줌 //Math.floor()는 소수점 이하를 버림
+    console.log(data.data.movies[randomData]);
+    const movieWrapper = document.querySelector('.recent-img');
+    const mainMovie = data.data.movies[randomData];
+    const imgEl = `<img src=${mainMovie.large_cover_image}>`;
+
+    movieWrapper.insertAdjacentHTML('beforeend', imgEl);
   } catch (error) {
-    //실패할 경우 두번째 코드 블럭으로 이동
+    // 실패할 경우 두번째 코드 블럭으로 이동
     console.log('Error : ', error);
   }
 }
 
-getMovies(3);
+getProducts(1);
+
+// const numbers = document.querySelectorAll('.numbers span');
+// numbers.forEach((number) => {
+//   number.addEventListener('click', function () {
+//     getProducts(this.textContent);
+//   });
+// });
